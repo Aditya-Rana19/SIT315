@@ -1,0 +1,22 @@
+Report and Reflection on Challenges and Key Findings
+
+1. System Overview and Architecture
+This project involved designing and implementing a Smart Home Security System using an Arduino Uno and an interrupt-based programming approach. The system follows the Sense–Think–Act model by monitoring three digital sensors that represent a motion sensor, a door sensor and a window sensor. The motion sensor is connected using an external interrupt (attachInterrupt()), while the door and window sensors are monitored using Pin Change Interrupts (PCI). A Timer1 interrupt generates a periodic event every second to blink the status LED and display the current system status on the Serial Monitor.
+The program is organised into separate functions for sensor processing, security decision making and actuator control. Interrupt Service Routines (ISRs) are intentionally kept short and only update shared flags, while the main loop performs the processing and controls the outputs. This improves code readability, keeps interrupt execution fast and follows recommended embedded systems programming practices.
+
+2. Interrupt Configuration and Usage
+Three different interrupt mechanisms were implemented in this project.
+The external interrupt detects changes from the motion sensor connected to digital pin D2. Pin Change Interrupts monitor the door and window sensors connected to pins D8 and D9, allowing multiple sensors to share the same interrupt vector. Timer1 is configured in CTC (Clear Timer on Compare Match) mode to generate an interrupt every second, providing a periodic task independent of sensor events.
+Using these different interrupt types allows the system to respond immediately to sensor changes while also performing scheduled tasks without relying on polling or blocking delays. The timer interrupt updates the system status and blinks the system LED, while the event-driven interrupts detect changes from the sensors as soon as they occur.
+3. Challenges Encountered and Solutions
+One of the main challenges during development was configuring the project correctly in TinkerCad. Initially, the program produced compilation errors because the Arduino.h library had been manually included. Since TinkerCad automatically includes the Arduino core, removing this library resolved the problem and allowed the project to compile successfully.
+Another challenge was switch bouncing, where pressing a push button generated multiple OPEN and CLOSED messages in the Serial Monitor. This behaviour was reduced by implementing a simple software debounce using the millis() function to ignore very rapid state changes.
+Testing also played an important role in verifying the system. Different combinations of motion, door and window events were tested to confirm that the alarm activated only when motion was detected while either the door or window was open. This confirmed that the Sense–Think–Act logic behaved as expected.
+
+4. GitHub Repository
+A private GitHub repository was created to manage all project files, including the Arduino source code (TaskM1.cpp), board diagram, system monitoring log, report and project documentation. Using GitHub provided version control throughout the development process and ensured that project files remained organised and backed up. It also demonstrates good software development practices by keeping all project artefacts in a single location where future improvements and updates can be managed efficiently.
+
+5. Key Findings and Reflection
+This project improved my understanding of interrupt-driven programming and demonstrated how multiple interrupt types can work together within a single embedded application. I learnt the importance of keeping Interrupt Service Routines short, using shared flags for communication with the main program and separating event-driven processing from periodic tasks.
+Working with external interrupts, pin change interrupts and hardware timers provided valuable practical experience beyond simple polling techniques. I also developed a better understanding of modular program design, hardware debugging and systematic testing of embedded systems.
+Overall, this project strengthened my confidence in developing real-time embedded applications and reinforced the importance of writing organised, maintainable and responsive code. The experience has given me a stronger appreciation of how interrupt-driven systems improve efficiency and responsiveness in embedded devices, and I will apply these concepts in future IoT and embedded systems projects.
